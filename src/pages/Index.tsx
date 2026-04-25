@@ -10,7 +10,6 @@ import { SkeletonResults } from "@/components/SkeletonResults";
 import { TraceDrawer } from "@/components/TraceDrawer";
 import { MapView } from "@/components/MapView";
 import { ScrollScene } from "@/components/ScrollScene";
-import { MemeOverlay } from "@/components/MemeOverlay";
 import { fetchHospitals, SUGGESTED_QUERIES, TOTAL_INDEXED, type Hospital } from "@/lib/mock";
 import { haptic } from "@/lib/haptics";
 
@@ -35,10 +34,8 @@ const Index = () => {
   const [traceFor, setTraceFor] = useState<Hospital | null>(null);
   const [lastQuery, setLastQuery] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [memeTrigger, setMemeTrigger] = useState(0);
 
   const handleSearch = async (q: string) => {
-    setMemeTrigger((n) => n + 1);
     setLoading(true);
     setResults(null);
     setLastQuery(q);
@@ -231,7 +228,6 @@ const Index = () => {
         </section>
 
         <TraceDrawer hospital={traceFor} onClose={() => setTraceFor(null)} />
-        <MemeOverlay triggerKey={memeTrigger} />
       </div>
     </div>
   );
