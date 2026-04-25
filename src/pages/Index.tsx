@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { LayoutGrid, Map as MapIcon, ShieldCheck, Database } from "lucide-react";
+import { LayoutGrid, Map as MapIcon, ShieldCheck, ArrowLeft } from "lucide-react";
 import { HeartbeatLogo } from "@/components/HeartbeatLogo";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { SearchBar } from "@/components/SearchBar";
@@ -42,6 +42,17 @@ const Index = () => {
     const data = await fetchHospitals(q);
     setResults(data);
     setLoading(false);
+  };
+
+  const handleReset = () => {
+    haptic("select");
+    setResults(null);
+    setLoading(false);
+    setLastQuery("");
+    setSearchValue("");
+    setFilter("all");
+    setTraceFor(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const filtered = useMemo(() => {
@@ -161,8 +172,18 @@ const Index = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6"
               >
-                <div className="overflow-x-auto scrollbar-thin -mx-1 px-1">
-                  <FilterPills active={filter} onChange={setFilter} />
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <button
+                    onClick={handleReset}
+                    aria-label="Back to search"
+                    className="inline-flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-full text-xs font-medium bg-card border border-border/60 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-primary/5 transition-colors min-h-[36px]"
+                  >
+                    <ArrowLeft className="size-3.5" />
+                    <span>Back</span>
+                  </button>
+                  <div className="overflow-x-auto scrollbar-thin -mx-1 px-1">
+                    <FilterPills active={filter} onChange={setFilter} />
+                  </div>
                 </div>
                 <div className="inline-flex p-1 rounded-full bg-card border border-border/60 self-start sm:self-auto">
                   <ViewToggle current={view} setView={setView} mode="list" icon={<LayoutGrid className="size-3.5" />} label="List" />
