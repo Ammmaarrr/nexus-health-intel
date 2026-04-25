@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 interface Props {
   score: number; // 0–1
   size?: number;
+  /** Optional ± confidence interval (0..1) shown beneath the score. */
+  interval?: number;
 }
 
 const colorFor = (s: number) => {
@@ -11,7 +13,7 @@ const colorFor = (s: number) => {
   return "hsl(var(--trust-low))";
 };
 
-export const TrustGauge = ({ score, size = 80 }: Props) => {
+export const TrustGauge = ({ score, size = 80, interval }: Props) => {
   const radius = 36;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - score * circumference;
@@ -48,12 +50,22 @@ export const TrustGauge = ({ score, size = 80 }: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-lg font-semibold font-mono-tech"
+          className="text-base sm:text-lg font-semibold font-mono-tech leading-none"
           style={{ color: stroke }}
         >
           {(score * 100).toFixed(0)}
         </motion.span>
-        <span className="text-[9px] uppercase tracking-wider text-muted-foreground">trust</span>
+        <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-muted-foreground mt-0.5">trust</span>
+        {typeof interval === "number" && (
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+            className="text-[8px] sm:text-[9px] font-mono-tech text-muted-foreground"
+          >
+            ±{(interval * 100).toFixed(0)}
+          </motion.span>
+        )}
       </div>
     </div>
   );

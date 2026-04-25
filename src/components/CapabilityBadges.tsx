@@ -15,6 +15,9 @@ const LABELS: Record<string, string> = {
   anesthesiology: "Anesthesia",
   obstetrics: "Obstetrics",
   radiology: "Radiology",
+  oncology: "Oncology",
+  dialysis: "Dialysis",
+  trauma: "Trauma",
 };
 
 const container = {
