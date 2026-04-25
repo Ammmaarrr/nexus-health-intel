@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { haptic } from "@/lib/haptics";
 
 interface Props {
   title: string;
@@ -14,8 +15,11 @@ export const Collapsible = ({ title, badge, defaultOpen = false, children }: Pro
   return (
     <div className="border-t border-border/60 pt-3">
       <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center justify-between w-full text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+        onClick={() => {
+          haptic("tap");
+          setOpen((v) => !v);
+        }}
+        className="flex items-center justify-between w-full text-sm font-medium text-foreground/90 hover:text-primary transition-colors min-h-[40px]"
       >
         <span className="flex items-center gap-2">
           {title}
