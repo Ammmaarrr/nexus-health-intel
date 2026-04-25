@@ -93,23 +93,6 @@ const Index = () => {
               Every claim cross-verified. Every answer scored.
             </motion.p>
 
-            {/* Scale banner */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0, duration: 0.5 }}
-              className="mt-5 inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 rounded-full border border-border/60 bg-card/60 backdrop-blur px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-mono-tech max-w-full"
-            >
-              <Database className="size-3.5 text-primary" />
-              <span className="text-muted-foreground text-center">
-                Indexed{" "}
-                <span className="text-primary font-semibold">
-                  {TOTAL_INDEXED.toLocaleString()}
-                </span>{" "}
-                <span className="hidden sm:inline">facilities · 28 sources · 3-pass validator</span>
-                <span className="sm:hidden">facilities · 3-pass</span>
-              </span>
-            </motion.div>
           </div>
 
           <motion.div
