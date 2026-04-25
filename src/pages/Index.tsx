@@ -80,7 +80,7 @@ const Index = () => {
         <section className="relative pt-10 sm:pt-16 pb-8 sm:pb-10 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <AnimatedTitle
-              text="Trust-scored medical discovery, in real time."
+              text="Trust-scored medical discovery."
               className="text-[26px] sm:text-4xl md:text-6xl font-bold tracking-tight leading-[1.15] sm:leading-[1.05] text-balance px-2"
             />
 
@@ -90,8 +90,7 @@ const Index = () => {
               transition={{ delay: 0.9, duration: 0.5 }}
               className="mt-3 sm:mt-6 max-w-2xl mx-auto text-[13px] sm:text-base md:text-lg text-muted-foreground px-2 leading-relaxed"
             >
-              Cross-verify hospital capabilities against government, institutional, and accreditation
-              sources. Every claim carries evidence, every answer carries a score.
+              Every claim cross-verified. Every answer scored.
             </motion.p>
 
             {/* Scale banner */}
@@ -135,9 +134,6 @@ const Index = () => {
               transition={{ delay: 1.3, duration: 0.5 }}
               className="mt-5 max-w-3xl mx-auto"
             >
-              <p className="text-[10px] sm:text-[11px] uppercase tracking-widest text-muted-foreground font-mono-tech mb-2 text-center">
-                Try a complex query
-              </p>
               <div className="flex flex-wrap justify-center gap-2">
                 {SUGGESTED_QUERIES.map((q) => (
                   <button
@@ -284,21 +280,21 @@ const PIPELINE = [
   {
     k: "Sources",
     v: "Gov · NABH · Institutional",
-    d: "Authority-weighted scoring across 28 registries.",
+    d: "28 authority-weighted registries.",
     metric: "28",
     metricLabel: "feeds",
   },
   {
     k: "Verification",
     v: "3-pass cross-check",
-    d: "Validator agent contests every claim before it ships.",
+    d: "Every claim contested before shipping.",
     metric: "3×",
     metricLabel: "passes",
   },
   {
     k: "Transparency",
     v: "Full trace per result",
-    d: "Inspect every reasoning step, citation, and confidence.",
+    d: "Inspect every step and citation.",
     metric: "100%",
     metricLabel: "audit",
   },
