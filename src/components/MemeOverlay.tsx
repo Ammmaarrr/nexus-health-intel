@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import memeFace from "@/assets/meme-face.png";
+import memeSound from "@/assets/sounds/meme.mp3";
 
 const PROMPTS = [
   "BRO YOU CAN DIE 💀",
@@ -13,11 +14,38 @@ const PROMPTS = [
 export const MemeOverlay = ({ triggerKey }: { triggerKey: number }) => {
   const [prompt, setPrompt] = useState(PROMPTS[0]);
   const [visible, setVisible] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const loopRef = useRef<number | null>(null);
+
+  // Lazy-init audio element once
+  useEffect(() => {
+    const a = new Audio(memeSound);
+    a.volume = 0.6;
+    audioRef.current = a;
+    return () => {
+      a.pause();
+      if (loopRef.current) window.clearInterval(loopRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (triggerKey === 0) return; // skip initial mount
     setPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)]);
     setVisible(true);
+
+    const a = audioRef.current;
+    if (a) {
+      a.currentTime = 0;
+      a.play().catch(() => {
+        /* autoplay blocked — ignore */
+      });
+      // Re-trigger every 2s so the meme keeps screaming while it stays on screen
+      if (loopRef.current) window.clearInterval(loopRef.current);
+      loopRef.current = window.setInterval(() => {
+        a.currentTime = 0;
+        a.play().catch(() => {});
+      }, 2000);
+    }
   }, [triggerKey]);
 
   return (
