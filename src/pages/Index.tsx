@@ -302,14 +302,17 @@ const IdleState = () => (
     </div>
 
     {/* Clean 3-column grid */}
-    <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+    {/* Single horizontal bar with three segments */}
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.5, duration: 0.5, ease: "easeOut" }}
+      className="relative z-10 rounded-2xl border border-border/60 bg-card/40 backdrop-blur-sm overflow-hidden flex flex-col md:flex-row md:divide-x divide-y md:divide-y-0 divide-border/60"
+    >
       {PIPELINE.map((c, i) => (
-        <motion.div
+        <div
           key={c.k}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5 + i * 0.12, duration: 0.5, ease: "easeOut" }}
-          className="group relative rounded-2xl border border-border/60 bg-card/40 backdrop-blur-sm p-6 sm:p-7 hover:border-primary/40 hover:bg-card/60 transition-colors"
+          className="group relative flex-1 p-6 sm:p-7 hover:bg-card/60 transition-colors"
         >
           {/* Step index */}
           <div className="flex items-baseline justify-between mb-4">
@@ -341,9 +344,9 @@ const IdleState = () => (
 
           {/* Bottom accent */}
           <div className="mt-5 h-px w-8 bg-primary/50 transition-all duration-500 group-hover:w-full" />
-        </motion.div>
+        </div>
       ))}
-    </div>
+    </motion.div>
   </motion.div>
 );
 
