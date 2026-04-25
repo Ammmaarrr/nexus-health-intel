@@ -115,23 +115,38 @@ const Index = () => {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.3, duration: 0.5 }}
-              className="mt-5 max-w-3xl mx-auto"
+              className="mt-8 max-w-2xl mx-auto"
             >
-              <div className="flex flex-wrap justify-center gap-2">
-                {SUGGESTED_QUERIES.map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => {
-                      haptic("select");
-                      setSearchValue(q);
-                      handleSearch(q);
-                    }}
-                    className="text-left text-[11px] sm:text-[13px] px-3 py-2 rounded-full bg-card/60 border border-border/60 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-primary/5 backdrop-blur transition-colors min-h-[36px] leading-snug max-w-full"
-                  >
-                    {q}
-                  </button>
-                ))}
+              <div className="flex items-center gap-3 mb-3 px-1">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-mono-tech">
+                  Try
+                </span>
+                <div className="flex-1 h-px bg-border/40" />
               </div>
+              <ul className="divide-y divide-border/40">
+                {SUGGESTED_QUERIES.map((q, i) => (
+                  <li key={q}>
+                    <button
+                      onClick={() => {
+                        haptic("select");
+                        setSearchValue(q);
+                        handleSearch(q);
+                      }}
+                      className="group w-full flex items-center gap-4 px-1 py-3 text-left text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <span className="font-mono-tech text-[10px] text-muted-foreground/40 group-hover:text-primary transition-colors tabular-nums shrink-0 w-6">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-[13px] sm:text-sm leading-snug flex-1">
+                        {q}
+                      </span>
+                      <span className="text-primary/0 group-hover:text-primary transition-colors text-sm shrink-0">
+                        →
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           )}
         </section>
