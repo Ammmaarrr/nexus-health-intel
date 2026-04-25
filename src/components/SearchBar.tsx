@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Search, Sparkles } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { AnalyzingPulse } from "./AnalyzingPulse";
 
 interface Props {
   onSubmit: (q: string) => void;
@@ -48,8 +49,17 @@ export const SearchBar = ({ onSubmit, loading, initial = "" }: Props) => {
           disabled={loading || !value.trim()}
           className="group relative inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_24px_hsl(var(--primary)/0.6)]"
         >
-          <Sparkles className="size-4 transition-transform group-hover:rotate-12" />
-          {loading ? "Analyzing…" : "Investigate"}
+          {loading ? (
+            <>
+              <span>Analyzing</span>
+              <AnalyzingPulse variant="inline" className="text-primary-foreground" />
+            </>
+          ) : (
+            <>
+              <Sparkles className="size-4 transition-transform group-hover:rotate-12" />
+              <span>Investigate</span>
+            </>
+          )}
         </button>
       </motion.form>
     </div>
