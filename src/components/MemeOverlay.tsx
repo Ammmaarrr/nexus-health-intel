@@ -10,18 +10,21 @@ const PROMPTS = [
   "loading... but also bro you can die 💀",
 ];
 
-export const MemeOverlay = ({ active }: { active: boolean }) => {
+export const MemeOverlay = ({ triggerKey }: { triggerKey: number }) => {
   const [prompt, setPrompt] = useState(PROMPTS[0]);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (active) {
-      setPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)]);
-    }
-  }, [active]);
+    if (triggerKey === 0) return; // skip initial mount
+    setPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)]);
+    setVisible(true);
+    const t = setTimeout(() => setVisible(false), 3500);
+    return () => clearTimeout(t);
+  }, [triggerKey]);
 
   return (
     <AnimatePresence>
-      {active && (
+      {visible && (
         <motion.div
           initial={{ opacity: 0, scale: 0.4, y: 60, rotate: -12 }}
           animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
