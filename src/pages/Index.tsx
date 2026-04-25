@@ -324,7 +324,7 @@ const IdleState = () => (
     {/* Centered editorial header */}
     <div className="text-center mb-12 sm:mb-16">
       <span className="text-[10px] uppercase tracking-[0.4em] text-primary/80 font-mono-tech">
-        Method
+        How we do it
       </span>
       <h2 className="mt-3 text-3xl sm:text-5xl font-bold tracking-tight leading-[1.05]">
         We don't <em className="not-italic text-primary">guess.</em>{" "}
