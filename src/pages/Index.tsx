@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { LayoutGrid, Map as MapIcon, ShieldCheck, Database, Radar, GitBranch, Eye } from "lucide-react";
+import { LayoutGrid, Map as MapIcon, ShieldCheck, Database } from "lucide-react";
 import { HeartbeatLogo } from "@/components/HeartbeatLogo";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { SearchBar } from "@/components/SearchBar";
@@ -295,7 +295,6 @@ const PIPELINE = [
     k: "Sources",
     v: "Gov · NABH · Institutional",
     d: "Authority-weighted scoring across 28 registries.",
-    Icon: Radar,
     metric: "28",
     metricLabel: "feeds",
   },
@@ -303,7 +302,6 @@ const PIPELINE = [
     k: "Verification",
     v: "3-pass cross-check",
     d: "Validator agent contests every claim before it ships.",
-    Icon: GitBranch,
     metric: "3×",
     metricLabel: "passes",
   },
@@ -311,7 +309,6 @@ const PIPELINE = [
     k: "Transparency",
     v: "Full trace per result",
     d: "Inspect every reasoning step, citation, and confidence.",
-    Icon: Eye,
     metric: "100%",
     metricLabel: "audit",
   },
@@ -322,109 +319,52 @@ const IdleState = () => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 1.4, duration: 0.6 }}
-    className="relative mt-12 sm:mt-16"
+    className="relative mt-14 sm:mt-20"
   >
-    {/* Section label */}
-    <div className="flex items-center justify-center gap-3 mb-6 sm:mb-8">
-      <span className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-primary/60" />
-      <span className="text-[10px] uppercase tracking-[0.25em] text-primary font-mono-tech">
-        How the agent thinks
+    {/* Editorial label */}
+    <div className="flex items-baseline justify-between mb-4 sm:mb-6 px-1">
+      <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-mono-tech">
+        — How the agent thinks
       </span>
-      <span className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-primary/60" />
+      <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 font-mono-tech hidden sm:inline">
+        v0.4 · evidence-first
+      </span>
     </div>
 
-    <div className="relative">
-      {/* Animated connecting trace line — desktop horizontal, mobile vertical */}
-      <svg
-        className="hidden md:block absolute left-0 right-0 top-[64px] mx-auto pointer-events-none"
-        height="2"
-        width="100%"
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        <defs>
-          <linearGradient id="trace-line" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-            <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <line
-          x1="8%"
-          x2="92%"
-          y1="1"
-          y2="1"
-          stroke="url(#trace-line)"
-          strokeWidth="1"
-          strokeDasharray="4 6"
-        />
-      </svg>
-      <div
-        className="md:hidden absolute left-7 top-12 bottom-12 w-px bg-gradient-to-b from-transparent via-primary/40 to-transparent pointer-events-none"
-        aria-hidden
-      />
+    {/* Hairline divider */}
+    <div className="h-px bg-border/60 mb-6 sm:mb-8" />
 
-      <div className="grid md:grid-cols-3 gap-4 sm:gap-5 relative">
-        {PIPELINE.map((c, i) => {
-          const { Icon } = c;
-          return (
-            <motion.div
-              key={c.k}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5 + i * 0.12, type: "spring", stiffness: 120, damping: 18 }}
-              whileHover={{ y: -4 }}
-              className="group relative"
-            >
-              {/* Glow halo */}
-              <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-primary/30 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-500" />
+    <div className="grid md:grid-cols-3 md:divide-x divide-border/40 gap-y-6 md:gap-y-0">
+      {PIPELINE.map((c, i) => (
+        <motion.div
+          key={c.k}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5 + i * 0.1, duration: 0.5, ease: "easeOut" }}
+          className="md:px-6 first:md:pl-0 last:md:pr-0 group"
+        >
+          {/* Step index + metric on one line — editorial header */}
+          <div className="flex items-baseline justify-between mb-3">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-mono-tech">
+              {String(i + 1).padStart(2, "0")} / {c.k}
+            </span>
+            <span className="text-[11px] font-mono-tech text-muted-foreground">
+              {c.metric}
+              <span className="text-muted-foreground/50 ml-1">{c.metricLabel}</span>
+            </span>
+          </div>
 
-              <div className="relative rounded-2xl bg-card/70 border border-border/60 backdrop-blur-md p-5 sm:p-6 overflow-hidden h-full">
-                {/* Subtle inner gradient */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.04] via-transparent to-transparent" />
-                {/* Corner step number */}
-                <span className="absolute top-3 right-4 text-[44px] sm:text-[56px] font-bold leading-none text-primary/10 font-mono-tech select-none pointer-events-none">
-                  0{i + 1}
-                </span>
+          <p className="text-base sm:text-[17px] font-semibold tracking-tight leading-snug text-foreground/95">
+            {c.v}
+          </p>
+          <p className="mt-2 text-[13px] text-muted-foreground leading-relaxed">
+            {c.d}
+          </p>
 
-                {/* Glowing icon node — sits on the trace line */}
-                <div className="relative inline-flex items-center justify-center">
-                  <span className="absolute inset-0 rounded-xl bg-primary/30 blur-lg group-hover:bg-primary/50 transition-colors" />
-                  <span className="relative inline-flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground shadow-[0_0_24px_hsl(var(--primary)/0.5)]">
-                    <Icon className="size-5" />
-                  </span>
-                </div>
-
-                <p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-primary font-mono-tech">
-                  {c.k}
-                </p>
-                <p className="mt-1.5 text-base sm:text-lg font-semibold tracking-tight leading-snug">
-                  {c.v}
-                </p>
-                <p className="mt-2 text-xs sm:text-[13px] text-muted-foreground leading-relaxed">
-                  {c.d}
-                </p>
-
-                {/* Bottom metric strip */}
-                <div className="mt-5 pt-4 border-t border-border/60 flex items-baseline justify-between">
-                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono-tech">
-                    {c.metricLabel}
-                  </span>
-                  <span className="text-xl font-bold font-mono-tech bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent">
-                    {c.metric}
-                  </span>
-                </div>
-
-                {/* Live pulse dot */}
-                <span className="absolute bottom-5 left-5 inline-flex">
-                  <span className="absolute inline-flex size-2 rounded-full bg-trust-high opacity-75 animate-ping" />
-                  <span className="relative inline-flex size-2 rounded-full bg-trust-high" />
-                </span>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
+          {/* Quiet underline accent that animates on hover */}
+          <div className="mt-4 h-px w-8 bg-primary/50 transition-all duration-500 group-hover:w-20" />
+        </motion.div>
+      ))}
     </div>
   </motion.div>
 );
