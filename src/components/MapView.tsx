@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Minus, Plus, RotateCcw, X } from "lucide-react";
 import type { Hospital } from "@/lib/mock";
 import { PIN_ZONES } from "@/lib/mock";
+import { haptic } from "@/lib/haptics";
 
 interface Props {
   hospitals: Hospital[];
@@ -100,6 +101,7 @@ export const MapView = ({ hospitals, onSelect }: Props) => {
   }, []);
 
   const reset = useCallback(() => {
+    haptic("select");
     setTransform(IDENTITY);
     setPinned(null);
   }, []);
@@ -188,6 +190,7 @@ export const MapView = ({ hospitals, onSelect }: Props) => {
   // Tap a marker → pin its preview card. Ignore if user was panning.
   const handleMarkerTap = (h: Hospital) => {
     if (didPan.current) return;
+    haptic("impact");
     setPinned((prev) => (prev?.id === h.id ? null : h));
   };
 
@@ -373,10 +376,10 @@ export const MapView = ({ hospitals, onSelect }: Props) => {
 
         {/* Zoom controls — large touch targets (≥44px) */}
         <div className="absolute right-2 sm:right-3 bottom-2 sm:bottom-3 flex flex-col gap-1.5 z-10">
-          <ZoomBtn label="Zoom in" onClick={() => zoomAt(1.4)}>
+          <ZoomBtn label="Zoom in" onClick={() => { haptic("tap"); zoomAt(1.4); }}>
             <Plus className="size-4 sm:size-5" />
           </ZoomBtn>
-          <ZoomBtn label="Zoom out" onClick={() => zoomAt(1 / 1.4)}>
+          <ZoomBtn label="Zoom out" onClick={() => { haptic("tap"); zoomAt(1 / 1.4); }}>
             <Minus className="size-4 sm:size-5" />
           </ZoomBtn>
           <ZoomBtn label="Reset view" onClick={reset}>
@@ -413,7 +416,10 @@ export const MapView = ({ hospitals, onSelect }: Props) => {
                   </p>
                 </div>
                 <button
-                  onClick={() => setPinned(null)}
+                  onClick={() => {
+                    haptic("tap");
+                    setPinned(null);
+                  }}
                   aria-label="Close pin"
                   className="size-9 -mr-1 -mt-1 inline-flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition shrink-0"
                 >
@@ -433,7 +439,10 @@ export const MapView = ({ hospitals, onSelect }: Props) => {
                 </span>
               </div>
               <button
-                onClick={() => onSelect(pinned)}
+                onClick={() => {
+                  haptic("impact");
+                  onSelect(pinned);
+                }}
                 className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2.5 text-xs font-medium text-primary-foreground hover:shadow-[0_0_24px_hsl(var(--primary)/0.5)] transition"
               >
                 Open verification trace

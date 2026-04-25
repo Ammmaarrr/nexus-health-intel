@@ -3,6 +3,7 @@ import { X, ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { Hospital } from "@/lib/mock";
+import { haptic } from "@/lib/haptics";
 
 interface Props {
   hospital: Hospital | null;
@@ -23,7 +24,10 @@ export const TraceDrawer = ({ hospital, onClose }: Props) => (
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={() => {
+            haptic("tap");
+            onClose();
+          }}
           className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
         />
         <motion.aside
@@ -42,8 +46,11 @@ export const TraceDrawer = ({ hospital, onClose }: Props) => (
               <p className="text-xs text-muted-foreground truncate">{hospital.location} · PIN {hospital.pin}</p>
             </div>
             <button
-              onClick={onClose}
-              className="rounded-lg p-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary transition shrink-0"
+              onClick={() => {
+                haptic("tap");
+                onClose();
+              }}
+              className="rounded-lg p-2 min-w-[40px] min-h-[40px] inline-flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition shrink-0"
               aria-label="Close trace"
             >
               <X className="size-4" />
