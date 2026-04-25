@@ -18,8 +18,6 @@ export const MemeOverlay = ({ triggerKey }: { triggerKey: number }) => {
     if (triggerKey === 0) return; // skip initial mount
     setPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)]);
     setVisible(true);
-    const t = setTimeout(() => setVisible(false), 3500);
-    return () => clearTimeout(t);
   }, [triggerKey]);
 
   return (
@@ -30,16 +28,16 @@ export const MemeOverlay = ({ triggerKey }: { triggerKey: number }) => {
           animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
           exit={{ opacity: 0, scale: 0.6, y: 40, rotate: 8 }}
           transition={{ type: "spring", stiffness: 260, damping: 18 }}
-          className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 pointer-events-none flex items-end gap-3"
+          className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center gap-4 sm:gap-6"
         >
           {/* Speech bubble */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.25, duration: 0.3 }}
-            className="relative mb-4 max-w-[220px] rounded-2xl rounded-br-sm bg-card border-2 border-primary/60 px-4 py-3 shadow-[0_0_30px_hsl(var(--primary)/0.4)]"
+            className="relative max-w-[260px] sm:max-w-sm rounded-2xl rounded-br-sm bg-card border-2 border-primary/60 px-5 py-4 shadow-[0_0_40px_hsl(var(--primary)/0.5)]"
           >
-            <p className="text-sm font-bold text-foreground leading-tight font-mono-tech">
+            <p className="text-base sm:text-lg font-bold text-foreground leading-tight font-mono-tech">
               {prompt}
             </p>
             {/* Bubble tail */}
@@ -50,8 +48,8 @@ export const MemeOverlay = ({ triggerKey }: { triggerKey: number }) => {
           <motion.img
             src={memeFace}
             alt="meme reaction"
-            width={120}
-            height={120}
+            width={256}
+            height={256}
             loading="lazy"
             animate={{
               rotate: [0, -4, 4, -3, 3, 0],
@@ -63,7 +61,7 @@ export const MemeOverlay = ({ triggerKey }: { triggerKey: number }) => {
               repeatType: "loop",
               ease: "easeInOut",
             }}
-            className="size-24 sm:size-32 drop-shadow-[0_8px_24px_hsl(var(--primary)/0.5)]"
+            className="size-40 sm:size-56 md:size-64 drop-shadow-[0_8px_30px_hsl(var(--primary)/0.6)]"
           />
         </motion.div>
       )}
