@@ -25,9 +25,9 @@ const Helix = ({ progress }: HelixProps) => {
   // Stable per-instance dummy object reused for matrix updates.
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  // Dark-blue primary glow colors.
-  const tealA = useMemo(() => new THREE.Color("#3B82F6"), []);
-  const tealB = useMemo(() => new THREE.Color("#1D4ED8"), []);
+  // Holographic cyan + violet glow colors.
+  const tealA = useMemo(() => new THREE.Color("#22D3EE"), []);
+  const tealB = useMemo(() => new THREE.Color("#A855F7"), []);
 
   useFrame((state) => {
     if (!group.current) return;
@@ -123,8 +123,8 @@ export const DnaHelix = ({ progress, className }: DnaHelixProps) => (
       gl={{ antialias: true, alpha: true }}
     >
       <ambientLight intensity={0.35} />
-      <pointLight position={[5, 5, 5]} intensity={1.2} color="#3B82F6" />
-      <pointLight position={[-5, -3, -2]} intensity={0.8} color="#1D4ED8" />
+      <pointLight position={[5, 5, 5]} intensity={1.2} color="#22D3EE" />
+      <pointLight position={[-5, -3, -2]} intensity={0.9} color="#A855F7" />
       <Helix progress={progress} />
     </Canvas>
   </div>
