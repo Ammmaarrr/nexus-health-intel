@@ -305,51 +305,73 @@ const IdleState = () => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 1.4, duration: 0.6 }}
-    className="relative mt-14 sm:mt-20"
+    className="relative mt-20 sm:mt-28"
   >
-    {/* Editorial label */}
-    <div className="flex items-baseline justify-between mb-4 sm:mb-6 px-1">
-      <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-mono-tech">
-        — How the agent thinks
+    {/* Asymmetric editorial header — oversized numeral collides with label */}
+    <div className="relative mb-10 sm:mb-14 pl-2 sm:pl-4">
+      <span
+        aria-hidden
+        className="absolute -top-6 sm:-top-10 -left-2 sm:left-0 text-[120px] sm:text-[180px] leading-none font-bold text-primary/[0.06] select-none tracking-tighter"
+      >
+        03
       </span>
-      <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 font-mono-tech hidden sm:inline">
-        v0.4 · evidence-first
-      </span>
+      <div className="relative">
+        <span className="text-[10px] uppercase tracking-[0.4em] text-primary/80 font-mono-tech">
+          Method
+        </span>
+        <h2 className="mt-2 text-2xl sm:text-4xl font-bold tracking-tight leading-[1.05] max-w-md">
+          We don't <em className="not-italic text-primary">guess.</em>
+          <br />
+          We <span className="underline decoration-primary/40 decoration-2 underline-offset-[6px]">cross-examine.</span>
+        </h2>
+      </div>
     </div>
 
-    <div className="relative z-10 grid md:grid-cols-3 md:divide-x divide-border/60 gap-y-6 md:gap-y-0 mt-6 sm:mt-8">
-      {PIPELINE.map((c, i) => (
-        <motion.div
-          key={c.k}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5 + i * 0.1, duration: 0.5, ease: "easeOut" }}
-          className="md:px-6 first:md:pl-0 last:md:pr-0 group"
-        >
-          {/* Step index + metric on one line — editorial header */}
-          <div className="flex items-baseline justify-between mb-3">
-            <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-mono-tech">
-              {String(i + 1).padStart(2, "0")} / {c.k}
-            </span>
-            <span className="text-[11px] font-mono-tech text-muted-foreground">
-              {c.metric}
-              <span className="text-muted-foreground/50 ml-1">{c.metricLabel}</span>
-            </span>
-          </div>
+    {/* Off-grid layout: stacked rows with shifting indentation */}
+    <div className="relative z-10 space-y-6 sm:space-y-8">
+      {PIPELINE.map((c, i) => {
+        const offsets = ["sm:ml-0", "sm:ml-16 md:ml-32", "sm:ml-8 md:ml-16"];
+        return (
+          <motion.div
+            key={c.k}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.5 + i * 0.12, duration: 0.5, ease: "easeOut" }}
+            className={`group relative flex items-start gap-4 sm:gap-6 max-w-2xl ${offsets[i]}`}
+          >
+            {/* Big numeric marker */}
+            <div className="shrink-0 pt-1">
+              <div className="font-mono-tech text-[11px] text-muted-foreground/60 tracking-widest">
+                {String(i + 1).padStart(2, "0")}
+              </div>
+              <div className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-primary/90 tabular-nums">
+                {c.metric}
+              </div>
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground/50 font-mono-tech">
+                {c.metricLabel}
+              </div>
+            </div>
 
-          <p className="text-base sm:text-[17px] font-semibold tracking-tight leading-snug text-foreground/95">
-            {c.v}
-          </p>
-          <p className="mt-2 text-[13px] text-muted-foreground leading-relaxed">
-            {c.d}
-          </p>
+            {/* Vertical rule that grows on hover */}
+            <div className="self-stretch w-px bg-border/50 group-hover:bg-primary/60 transition-colors duration-500" />
 
-          {/* Quiet underline accent that animates on hover */}
-          <div className="mt-4 h-px w-8 bg-primary/50 transition-all duration-500 group-hover:w-20" />
-        </motion.div>
-      ))}
+            <div className="flex-1 pt-1">
+              <div className="flex items-baseline gap-2 mb-1.5">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-mono-tech">
+                  {c.k}
+                </span>
+              </div>
+              <p className="text-lg sm:text-xl font-semibold tracking-tight leading-snug text-foreground/95">
+                {c.v}
+              </p>
+              <p className="mt-1.5 text-[13px] text-muted-foreground leading-relaxed">
+                {c.d}
+              </p>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
-
   </motion.div>
 );
 
