@@ -9,6 +9,7 @@ import { HospitalCard } from "@/components/HospitalCard";
 import { SkeletonResults } from "@/components/SkeletonResults";
 import { TraceDrawer } from "@/components/TraceDrawer";
 import { MapView } from "@/components/MapView";
+import { ScrollScene } from "@/components/ScrollScene";
 import { fetchHospitals, type Hospital } from "@/lib/mock";
 
 type ViewMode = "list" | "map";
@@ -46,6 +47,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative">
+      {/* Scroll-driven 3D backdrop (DNA helix + parallax glow + scanline) */}
+      <ScrollScene />
+
+      {/* Wrap content above the scene */}
+      <div className="relative z-10">
       {/* Top nav strip */}
       <header className="border-b border-border/40 backdrop-blur-sm sticky top-0 z-30 bg-background/70">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -160,6 +166,7 @@ const Index = () => {
       </section>
 
       <TraceDrawer hospital={traceFor} onClose={() => setTraceFor(null)} />
+      </div>
     </div>
   );
 };
