@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Search, Sparkles } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { AnalyzingPulse } from "./AnalyzingPulse";
+import { haptic } from "@/lib/haptics";
 
 interface Props {
   onSubmit: (q: string) => void;
@@ -30,6 +31,7 @@ export const SearchBar = ({
   const handle = (e: FormEvent) => {
     e.preventDefault();
     if (!value.trim() || loading) return;
+    haptic("impact");
     onSubmit(value.trim());
   };
 

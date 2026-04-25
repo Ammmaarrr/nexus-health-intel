@@ -4,6 +4,7 @@ import type { Hospital, ValidatorCheck } from "@/lib/mock";
 import { TrustGauge } from "./TrustGauge";
 import { CapabilityBadges } from "./CapabilityBadges";
 import { Collapsible } from "./Collapsible";
+import { haptic } from "@/lib/haptics";
 
 interface Props {
   hospital: Hospital;
@@ -119,7 +120,10 @@ export const HospitalCard = ({ hospital, onOpenTrace }: Props) => (
         id: {hospital.id}
       </span>
       <button
-        onClick={() => onOpenTrace(hospital)}
+        onClick={() => {
+          haptic("impact");
+          onOpenTrace(hospital);
+        }}
         className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary-glow transition-colors"
       >
         <FileSearch className="size-3.5" />

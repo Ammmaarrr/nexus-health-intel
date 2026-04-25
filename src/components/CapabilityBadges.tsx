@@ -43,9 +43,9 @@ export const CapabilityBadges = ({ capabilities }: Props) => (
           key={k}
           variants={item}
           whileHover={{ scale: 1.1, y: -2 }}
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${m.cls}`}
+          className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium border ${m.cls}`}
         >
-          <Icon className="size-3" />
+          <Icon className="size-2.5 sm:size-3" />
           {LABELS[k] ?? k}
         </motion.span>
       );

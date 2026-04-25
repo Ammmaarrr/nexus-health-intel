@@ -11,6 +11,7 @@ import { TraceDrawer } from "@/components/TraceDrawer";
 import { MapView } from "@/components/MapView";
 import { ScrollScene } from "@/components/ScrollScene";
 import { fetchHospitals, SUGGESTED_QUERIES, TOTAL_INDEXED, type Hospital } from "@/lib/mock";
+import { haptic } from "@/lib/haptics";
 
 type ViewMode = "list" | "map";
 
@@ -90,14 +91,14 @@ const Index = () => {
 
             <AnimatedTitle
               text="Trust-scored medical discovery, in real time."
-              className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] sm:leading-[1.05] text-balance px-2"
+              className="text-[26px] sm:text-4xl md:text-6xl font-bold tracking-tight leading-[1.15] sm:leading-[1.05] text-balance px-2"
             />
 
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.5 }}
-              className="mt-4 sm:mt-6 max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-muted-foreground px-2"
+              className="mt-3 sm:mt-6 max-w-2xl mx-auto text-[13px] sm:text-base md:text-lg text-muted-foreground px-2 leading-relaxed"
             >
               Cross-verify hospital capabilities against government, institutional, and accreditation
               sources. Every claim carries evidence, every answer carries a score.
@@ -108,15 +109,16 @@ const Index = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.0, duration: 0.5 }}
-              className="mt-5 inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 rounded-full border border-border/60 bg-card/60 backdrop-blur px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs font-mono-tech"
+              className="mt-5 inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 rounded-full border border-border/60 bg-card/60 backdrop-blur px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-mono-tech max-w-full"
             >
               <Database className="size-3.5 text-primary" />
-              <span className="text-muted-foreground">
+              <span className="text-muted-foreground text-center">
                 Indexed{" "}
                 <span className="text-primary font-semibold">
                   {TOTAL_INDEXED.toLocaleString()}
                 </span>{" "}
-                facilities · 28 sources · 3-pass validator
+                <span className="hidden sm:inline">facilities · 28 sources · 3-pass validator</span>
+                <span className="sm:hidden">facilities · 3-pass</span>
               </span>
             </motion.div>
           </div>
@@ -151,10 +153,11 @@ const Index = () => {
                   <button
                     key={q}
                     onClick={() => {
+                      haptic("select");
                       setSearchValue(q);
                       handleSearch(q);
                     }}
-                    className="text-left text-xs sm:text-[13px] px-3 py-1.5 rounded-full bg-card/60 border border-border/60 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-primary/5 backdrop-blur transition-colors"
+                    className="text-left text-[11px] sm:text-[13px] px-3 py-2 rounded-full bg-card/60 border border-border/60 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-primary/5 backdrop-blur transition-colors min-h-[36px] leading-snug max-w-full"
                   >
                     {q}
                   </button>
@@ -246,8 +249,11 @@ const ViewToggle = ({
   const active = current === mode;
   return (
     <button
-      onClick={() => setView(mode)}
-      className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+      onClick={() => {
+        if (current !== mode) haptic("select");
+        setView(mode);
+      }}
+      className={`relative inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-colors min-h-[36px] ${
         active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
       }`}
     >
