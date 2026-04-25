@@ -331,10 +331,10 @@ const IdleState = () => (
       </span>
     </div>
 
-    {/* Hairline divider */}
-    <div className="h-px bg-border/60 mb-6 sm:mb-8" />
+    {/* Hairline divider — full width, sits above the scroll scene */}
+    <div className="relative h-px bg-border mb-6 sm:mb-8 z-10" />
 
-    <div className="grid md:grid-cols-3 md:divide-x divide-border/40 gap-y-6 md:gap-y-0">
+    <div className="relative z-10 grid md:grid-cols-3 md:divide-x divide-border/60 gap-y-6 md:gap-y-0">
       {PIPELINE.map((c, i) => (
         <motion.div
           key={c.k}
@@ -366,6 +366,9 @@ const IdleState = () => (
         </motion.div>
       ))}
     </div>
+
+    {/* Closing hairline rule */}
+    <div className="relative h-px bg-border mt-8 z-10" />
   </motion.div>
 );
 
