@@ -313,17 +313,16 @@ const IdleState = () => (
     {/* Off-grid layout: stacked rows with shifting indentation */}
     <div className="relative z-10 space-y-6 sm:space-y-8">
       {PIPELINE.map((c, i) => {
-        const offsets = ["sm:ml-0", "sm:ml-16 md:ml-32", "sm:ml-8 md:ml-16"];
         return (
           <motion.div
             key={c.k}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.5 + i * 0.12, duration: 0.5, ease: "easeOut" }}
-            className={`group relative flex items-start gap-4 sm:gap-6 max-w-2xl ${offsets[i]}`}
+            className="group relative flex items-start gap-4 sm:gap-6 max-w-2xl mx-auto"
           >
             {/* Big numeric marker */}
-            <div className="shrink-0 pt-1">
+            <div className="shrink-0 pt-1 w-20">
               <div className="font-mono-tech text-[11px] text-muted-foreground/60 tracking-widest">
                 {String(i + 1).padStart(2, "0")}
               </div>
