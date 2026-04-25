@@ -1,21 +1,17 @@
-import { motion } from "framer-motion";
+import logoMark from "@/assets/logo-mark.png";
 
 export const HeartbeatLogo = ({ size = 36 }: { size?: number }) => (
-  <div className="relative" style={{ width: size, height: size }}>
-    <span className="absolute inset-0 rounded-full bg-primary/30 animate-pulse-ring" />
-    <span className="absolute inset-0 rounded-full bg-primary/15" />
-    <motion.svg
-      viewBox="0 0 24 24"
+  <div
+    className="relative inline-flex items-center justify-center"
+    style={{ width: size, height: size }}
+  >
+    <span className="absolute inset-0 rounded-full bg-primary/20 blur-md animate-pulse-ring" />
+    <img
+      src={logoMark}
+      alt="Healthcare.Intel logo"
       width={size}
       height={size}
-      className="relative animate-heartbeat text-primary"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 12h3l2-6 4 12 2-6h7" />
-    </motion.svg>
+      className="relative drop-shadow-[0_0_10px_hsl(var(--primary)/0.4)]"
+    />
   </div>
 );
