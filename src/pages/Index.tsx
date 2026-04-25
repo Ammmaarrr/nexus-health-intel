@@ -75,8 +75,8 @@ const Index = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
               <HeartbeatLogo size={26} />
-              <span className="text-sm font-semibold tracking-tight truncate">
-                Healthcare<span className="text-primary">.</span>Intel
+              <span className="text-sm font-semibold tracking-tight truncate bg-gradient-to-r from-[#E40303] via-[#FF8C00] via-30% via-[#FFED00] via-50% via-[#008026] via-65% via-[#004CFF] via-85% to-[#732982] bg-clip-text text-transparent">
+                Healthcare.Intel
               </span>
             </div>
           </div>
