@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { LayoutGrid, Map as MapIcon, ShieldCheck, ArrowLeft } from "lucide-react";
+import { LayoutGrid, Map as MapIcon, ArrowLeft } from "lucide-react";
 import { HeartbeatLogo } from "@/components/HeartbeatLogo";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { SearchBar } from "@/components/SearchBar";
@@ -78,11 +78,6 @@ const Index = () => {
               <span className="text-sm font-semibold tracking-tight truncate">
                 Healthcare<span className="text-primary">.</span>Intel
               </span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-widest text-muted-foreground font-mono-tech shrink-0">
-              <ShieldCheck className="size-3.5 text-primary" />
-              <span className="hidden sm:inline">v0.4 · evidence-first</span>
-              <span className="sm:hidden">v0.4</span>
             </div>
           </div>
         </header>
