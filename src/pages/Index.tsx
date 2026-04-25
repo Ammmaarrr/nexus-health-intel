@@ -79,16 +79,6 @@ const Index = () => {
         {/* Hero */}
         <section className="relative pt-10 sm:pt-16 pb-8 sm:pb-10 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/5 text-[10px] sm:text-[11px] font-mono-tech text-primary uppercase tracking-widest mb-4 sm:mb-6"
-            >
-              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-              Healthcare Intelligence Agent
-            </motion.div>
-
             <AnimatedTitle
               text="Trust-scored medical discovery, in real time."
               className="text-[26px] sm:text-4xl md:text-6xl font-bold tracking-tight leading-[1.15] sm:leading-[1.05] text-balance px-2"
