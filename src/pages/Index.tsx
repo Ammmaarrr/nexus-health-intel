@@ -1,16 +1,250 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { AnimatePresence, motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { LayoutGrid, Map as MapIcon, ShieldCheck } from "lucide-react";
+import { HeartbeatLogo } from "@/components/HeartbeatLogo";
+import { AnimatedTitle } from "@/components/AnimatedTitle";
+import { SearchBar } from "@/components/SearchBar";
+import { FilterPills, type FilterKey } from "@/components/FilterPills";
+import { HospitalCard } from "@/components/HospitalCard";
+import { SkeletonResults } from "@/components/SkeletonResults";
+import { TraceDrawer } from "@/components/TraceDrawer";
+import { MapView } from "@/components/MapView";
+import { fetchHospitals, type Hospital } from "@/lib/mock";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+type ViewMode = "list" | "map";
+
+const containerStagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const Index = () => {
+  const [results, setResults] = useState<Hospital[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState<FilterKey>("all");
+  const [view, setView] = useState<ViewMode>("list");
+  const [traceFor, setTraceFor] = useState<Hospital | null>(null);
+  const [lastQuery, setLastQuery] = useState("");
+
+  const handleSearch = async (q: string) => {
+    setLoading(true);
+    setResults(null);
+    setLastQuery(q);
+    const data = await fetchHospitals(q);
+    setResults(data);
+    setLoading(false);
+  };
+
+  const filtered = useMemo(() => {
+    if (!results) return [];
+    return results.filter((h) => {
+      if (filter === "high") return h.trust_score >= 0.75;
+      if (filter === "rural") return h.region === "rural";
+      return true;
+    });
+  }, [results, filter]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen relative">
+      {/* Top nav strip */}
+      <header className="border-b border-border/40 backdrop-blur-sm sticky top-0 z-30 bg-background/70">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <HeartbeatLogo size={26} />
+            <span className="text-sm font-semibold tracking-tight">
+              Healthcare<span className="text-primary">.</span>Intel
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground font-mono-tech">
+            <ShieldCheck className="size-3.5 text-primary" />
+            <span>v0.4 · evidence-first</span>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="relative pt-16 pb-10 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/5 text-[11px] font-mono-tech text-primary uppercase tracking-widest mb-6"
+          >
+            <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+            Healthcare Intelligence Agent
+          </motion.div>
+
+          <AnimatedTitle
+            text="Trust-scored medical discovery, in real time."
+            className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-balance"
+          />
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
+            className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground"
+          >
+            Cross-verify hospital capabilities against government, institutional, and accreditation
+            sources. Every claim carries evidence, every answer carries a score.
+          </motion.p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.5 }}
+          className="mt-10"
+        >
+          <SearchBar onSubmit={handleSearch} loading={loading} />
+        </motion.div>
+      </section>
+
+      {/* Results area */}
+      <section className="px-6 pb-24">
+        <div className="max-w-4xl mx-auto">
+          {/* Toolbar */}
+          {(loading || results) && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap items-center justify-between gap-3 mb-6"
+            >
+              <FilterPills active={filter} onChange={setFilter} />
+              <div className="inline-flex p-1 rounded-full bg-card border border-border/60">
+                <ViewToggle current={view} setView={setView} mode="list" icon={<LayoutGrid className="size-3.5" />} label="List" />
+                <ViewToggle current={view} setView={setView} mode="map" icon={<MapIcon className="size-3.5" />} label="Map" />
+              </div>
+            </motion.div>
+          )}
+
+          {loading && <SkeletonResults />}
+
+          {!loading && results && (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={view}
+                initial={{ opacity: 0, x: view === "list" ? -30 : 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: view === "list" ? 30 : -30 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                {view === "list" ? (
+                  <>
+                    <ResultsHeader query={lastQuery} count={filtered.length} total={results.length} />
+                    {filtered.length === 0 ? (
+                      <EmptyState />
+                    ) : (
+                      <motion.div
+                        variants={containerStagger}
+                        initial="hidden"
+                        animate="show"
+                        className="space-y-5"
+                      >
+                        {filtered.map((h) => (
+                          <HospitalCard key={h.id} hospital={h} onOpenTrace={setTraceFor} />
+                        ))}
+                      </motion.div>
+                    )}
+                  </>
+                ) : (
+                  <MapView hospitals={filtered} onSelect={setTraceFor} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          )}
+
+          {!loading && !results && <IdleState />}
+        </div>
+      </section>
+
+      <TraceDrawer hospital={traceFor} onClose={() => setTraceFor(null)} />
     </div>
   );
 };
 
-const Index = PlaceholderIndex;
+const ViewToggle = ({
+  current,
+  setView,
+  mode,
+  icon,
+  label,
+}: {
+  current: "list" | "map";
+  setView: (m: "list" | "map") => void;
+  mode: "list" | "map";
+  icon: React.ReactNode;
+  label: string;
+}) => {
+  const active = current === mode;
+  return (
+    <button
+      onClick={() => setView(mode)}
+      className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+        active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      {active && (
+        <motion.span
+          layoutId="view-toggle"
+          className="absolute inset-0 rounded-full bg-primary"
+          transition={{ type: "spring", stiffness: 380, damping: 32 }}
+        />
+      )}
+      <span className="relative flex items-center gap-1.5">
+        {icon}
+        {label}
+      </span>
+    </button>
+  );
+};
+
+const ResultsHeader = ({ query, count, total }: { query: string; count: number; total: number }) => (
+  <div className="mb-5">
+    <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono-tech">
+      Query
+    </p>
+    <p className="text-foreground/90 mt-1 text-sm">"{query}"</p>
+    <p className="text-xs text-muted-foreground mt-2 font-mono-tech">
+      {count} of {total} facilities · sorted by trust score
+    </p>
+  </div>
+);
+
+const EmptyState = () => (
+  <div className="rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
+    <p className="text-sm text-muted-foreground">No facilities match this filter.</p>
+  </div>
+);
+
+const IdleState = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1.4, duration: 0.6 }}
+    className="grid md:grid-cols-3 gap-4 mt-12"
+  >
+    {[
+      { k: "Sources", v: "Gov · NABH · Institutional", d: "Authority-weighted scoring" },
+      { k: "Verification", v: "3-pass cross-check", d: "Consensus before claim" },
+      { k: "Transparency", v: "Full trace per result", d: "Inspect every decision" },
+    ].map((c, i) => (
+      <motion.div
+        key={c.k}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5 + i * 0.1 }}
+        className="rounded-2xl bg-card/60 border border-border/60 p-5 backdrop-blur-sm"
+      >
+        <p className="text-[10px] uppercase tracking-widest text-primary font-mono-tech">
+          {c.k}
+        </p>
+        <p className="mt-2 text-sm font-semibold">{c.v}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{c.d}</p>
+      </motion.div>
+    ))}
+  </motion.div>
+);
 
 export default Index;
